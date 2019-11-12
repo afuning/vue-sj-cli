@@ -11,9 +11,16 @@ program
 
 program
   .command('init <app-name>')
-  .description('create a new project powered by vue-cli-service')
+  .description('create a new project')
   .action((name) => {
-    console.log('name: ', name)
     require('../lib/init')(name)
   })
+
+program
+  .command('add <template-name>')
+  .description('create a new template')
+  .action((name) => {
+    require('../lib/add')(name)
+  })
+
 program.parse(process.argv)
