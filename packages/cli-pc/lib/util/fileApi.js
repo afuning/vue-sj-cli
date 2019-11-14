@@ -1,4 +1,4 @@
-const fs = require('fs')
+const writeFileTree = require('./writeFileTree')
 
 /**
  * 读取文件
@@ -29,5 +29,8 @@ exports.formatTemplate = (template, options) => {
  * @param {*} { exportPath, fileName }
  */
 exports.renderTemplate = (template, { exportPath, fileName }) => {
-
+  const files = {
+    [fileName]: exportPath
+  }
+  writeFileTree(exportPath, files)
 }
