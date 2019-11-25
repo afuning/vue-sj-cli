@@ -1,3 +1,4 @@
+const fs = require('fs')
 const writeFileTree = require('./writeFileTree')
 
 /**
@@ -7,8 +8,8 @@ const writeFileTree = require('./writeFileTree')
  * @returns
  */
 exports.readFile = (path) => {
-  const finalTemplate = fs.readFileSync(path, 'utf-8')
-  return finalTemplate
+  const template = fs.readFileSync(path, 'utf-8')
+  return template
 }
 
 /**
@@ -30,7 +31,22 @@ exports.formatTemplate = (template, options) => {
  */
 exports.renderTemplate = (template, { exportPath, fileName }) => {
   const files = {
-    [fileName]: exportPath
+    [fileName]: template
   }
   writeFileTree(exportPath, files)
+}
+
+exports.createFile = (url, {
+  fileName,
+  exportPath
+}) => {
+  return new Promise((resolve, reject) => {
+    let t = exports.readFile(url)
+    t = exports.formatTemplate(t)
+    exports.renderTemplate(t, {
+      fileName,
+      exportPath
+    })
+    resolve()
+  })
 }

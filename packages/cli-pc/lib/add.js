@@ -12,9 +12,17 @@ const {
   stopSpinner,
   failSpinner
 } = require('./util/spinner')
+const {
+  logWithExit,
+  clearConsole
+} = require('./util/log')
+const { 
+  createFile
+} = require('./util/fileApi')
 
+const log = console.log
 const TEMPLATE_URL = new Map([
-  ['table', './template/table.js']
+  ['table', './template/table.vue']
 ])
 
 async function add (name) {
@@ -34,8 +42,15 @@ async function add (name) {
       ]
     }
   ])
-  const tempUrl = TEMPLATE_URL.get(type)
-  logWithSpinner(`🗃`, `${type}:Initializing git repository[${chalk.cyan(gitUrl)}]...`)
+  const tempUrl = path.resolve(__dirname, TEMPLATE_URL.get(type))
+  await clearConsole()
+  logWithSpinner(`🗃`, `${type}:Initializing template repository[${info(tempUrl)}]...`)
+  await createFile(tempUrl, {
+    fileName: name,
+    exportPath: cwd
+  })
+  stopSpinner()
+  logWithExit(`${success('生成成功')}`)
 }
 
 module.exports = (...args) => {
